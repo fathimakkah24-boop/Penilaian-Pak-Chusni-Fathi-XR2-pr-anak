@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Jadwal PR Anak</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-b from-blue-200 to-white min-h-screen flex flex-col items-center p-6">
+
+  <h1 class="text-4xl font-bold text-blue-700 mb-4 text-center">
+    📚 Jadwal PR Anak
+  </h1>
+
+  <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" class="w-40 mb-4">
+
+  <div class="bg-white shadow-xl rounded-2xl p-4 w-full max-w-md">
+    
+    <div class="flex gap-2">
+      <input id="taskInput" class="flex-1 border rounded-xl px-3 py-2" placeholder="Tulis PR kamu...">
+      <button onclick="addTask()" class="bg-blue-500 text-white px-4 rounded-xl">
+        Tambah
+      </button>
+    </div>
+
+    <ul id="taskList" class="mt-4 space-y-2"></ul>
+  </div>
+
+  <p class="mt-6 text-blue-600">
+    🎉 Semangat mengerjakan PR ya!
+  </p>
+
+<script>
+let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+
+function render() {
+  const list = document.getElementById("taskList");
+  list.innerHTML = "";
+  tasks.forEach((task, i) => {
+    list.innerHTML += `
+      <li class="flex justify-between bg-blue-100 p-2 rounded-xl">
+        <span>✏️ ${task}</span>
+        <button onclick="deleteTask(${i})">❌</button>
+      </li>
+    `;
+  });
+}
+
+function addTask() {
+  const input = document.getElementById("taskInput");
+  if (!input.value.trim()) return;
+  tasks.push(input.value);
+  input.value = "";
+  save();
+}
+
+function deleteTask(i) {
+  tasks.splice(i, 1);
+  save();
+}
+
+function save() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  render();
+}
+
+render();
+</script>
+
+</body>
+</html>
+
+Commit message: tambah website PR
