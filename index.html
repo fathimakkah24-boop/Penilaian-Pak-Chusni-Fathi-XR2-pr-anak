@@ -5,6 +5,7 @@
   <title>Jadwal PR Anak</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gradient-to-b from-blue-200 to-white min-h-screen flex flex-col items-center p-6">
 
   <h1 class="text-4xl font-bold text-blue-700 mb-4 text-center">
@@ -16,8 +17,18 @@
 
   <div class="bg-white shadow-xl rounded-2xl p-4 w-full max-w-md">
 
-    <!-- Input PR -->
+    <!-- Input -->
     <input id="taskInput" class="w-full border rounded-xl px-3 py-2 mb-2" placeholder="Tulis PR kamu...">
+
+    <!-- Mata Pelajaran -->
+    <select id="subject" class="w-full border rounded-xl px-3 py-2 mb-2">
+      <option>📘 Matematika</option>
+      <option>📖 Bahasa Indonesia</option>
+      <option>🔬 IPA</option>
+      <option>🌍 IPS</option>
+      <option>🎨 Seni</option>
+      <option>🏃 Olahraga</option>
+    </select>
 
     <!-- Kategori -->
     <select id="category" class="w-full border rounded-xl px-3 py-2 mb-2">
@@ -34,7 +45,6 @@
       Tambah PR
     </button>
 
-    <!-- List -->
     <ul id="taskList" class="mt-4 space-y-2"></ul>
 
   </div>
@@ -50,11 +60,34 @@
 <script>
 let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
 
+function getRemainingDays(deadline) {
+  const today = new Date();
+  const due = new Date(deadline);
+
+  today.setHours(0,0,0,0);
+  due.setHours(0,0,0,0);
+
+  const diff = (due - today) / (1000 * 60 * 60 * 24);
+
+  if (diff === 0) return {text: "⏰ Hari ini!", color: "text-red-600"};
+  if (diff === 1) return {text: "⚠️ Besok!", color: "text-orange-500"};
+  if (diff > 0) return {text: `⏳ ${diff} hari lagi`, color: "text-blue-700"};
+  return {text: `❌ Terlambat ${Math.abs(diff)} hari`, color: "text-gray-500"};
+}
+
+function sortTasks() {
+  tasks.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+}
+
 function render() {
   const list = document.getElementById("taskList");
   list.innerHTML = "";
 
+  sortTasks();
+
   tasks.forEach((task, i) => {
+    const remain = getRemainingDays(task.deadline);
+
     list.innerHTML += `
       <li class="bg-blue-100 p-3 rounded-xl">
         <div class="flex justify-between">
@@ -62,7 +95,10 @@ function render() {
           <button onclick="deleteTask(${i})">❌</button>
         </div>
         <div class="text-sm text-gray-600">
-          📂 ${task.category} | ⏰ ${task.deadline}
+          📘 ${task.subject} | 📂 ${task.category} | 📅 ${task.deadline}
+        </div>
+        <div class="text-sm font-semibold ${remain.color}">
+          ${remain.text}
         </div>
       </li>
     `;
@@ -71,6 +107,7 @@ function render() {
 
 function addTask() {
   const text = document.getElementById("taskInput").value;
+  const subject = document.getElementById("subject").value;
   const category = document.getElementById("category").value;
   const deadline = document.getElementById("deadline").value;
 
@@ -79,7 +116,7 @@ function addTask() {
     return;
   }
 
-  tasks.push({ text, category, deadline });
+  tasks.push({ text, subject, category, deadline });
   save();
 
   document.getElementById("taskInput").value = "";
