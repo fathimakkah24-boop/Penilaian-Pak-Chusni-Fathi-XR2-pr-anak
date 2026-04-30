@@ -6,56 +6,74 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gradient-to-b from-blue-200 to-white min-h-screen flex flex-col items-center p-6">
+<body class="bg-gradient-to-b from-blue-200 to-white min-h-screen flex justify-center p-6">
 
-  <h1 class="text-4xl font-bold text-blue-700 mb-4 text-center">
-    📚 Jadwal PR Anak SD
-  </h1>
+  <!-- CONTAINER UTAMA -->
+  <div class="flex gap-6 items-start">
 
-  <!-- Ilustrasi -->
-  <img src="https://cdn-icons-png.flaticon.com/512/3468/3468371.png" class="w-44 mb-4">
+    <!-- ILUSTRASI KIRI -->
+    <div class="hidden md:flex flex-col gap-4">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" class="w-24">
+      <img src="https://cdn-icons-png.flaticon.com/512/1995/1995574.png" class="w-24">
+    </div>
 
-  <div class="bg-white shadow-xl rounded-2xl p-4 w-full max-w-md">
+    <!-- KONTEN UTAMA -->
+    <div class="flex flex-col items-center">
 
-    <!-- Input -->
-    <input id="taskInput" class="w-full border rounded-xl px-3 py-2 mb-2" placeholder="Tulis PR kamu...">
+      <h1 class="text-4xl font-bold text-blue-700 mb-4 text-center">
+        📚 Jadwal PR Anak SD
+      </h1>
 
-    <!-- Mata Pelajaran -->
-    <select id="subject" class="w-full border rounded-xl px-3 py-2 mb-2">
-      <option>📘 Matematika</option>
-      <option>📖 Bahasa Indonesia</option>
-      <option>🔬 IPA</option>
-      <option>🌍 IPS</option>
-      <option>🎨 Seni</option>
-      <option>🏃 Olahraga</option>
-    </select>
+      <!-- Ilustrasi Tengah -->
+      <img src="https://cdn-icons-png.flaticon.com/512/3468/3468371.png" class="w-44 mb-4">
 
-    <!-- Kategori -->
-    <select id="category" class="w-full border rounded-xl px-3 py-2 mb-2">
-      <option value="Harian">📅 Harian</option>
-      <option value="Mingguan">🗓 Mingguan</option>
-      <option value="Bulanan">📆 Bulanan</option>
-      <option value="Tahunan">📖 Tahunan</option>
-    </select>
+      <div class="bg-white shadow-xl rounded-2xl p-4 w-full max-w-md">
 
-    <!-- Deadline -->
-    <input type="date" id="deadline" class="w-full border rounded-xl px-3 py-2 mb-2">
+        <!-- Judul PR -->
+        <input id="taskInput" class="w-full border rounded-xl px-3 py-2 mb-2" placeholder="Judul PR...">
 
-    <button onclick="addTask()" class="w-full bg-blue-500 text-white py-2 rounded-xl">
-      Tambah PR
-    </button>
+        <!-- Deskripsi -->
+        <textarea id="descInput" class="w-full border rounded-xl px-3 py-2 mb-2" placeholder="Deskripsi PR..."></textarea>
 
-    <ul id="taskList" class="mt-4 space-y-2"></ul>
+        <!-- Mata Pelajaran -->
+        <select id="subject" class="w-full border rounded-xl px-3 py-2 mb-2">
+          <option>📘 Matematika</option>
+          <option>📖 Bahasa Indonesia</option>
+          <option>🔬 IPA</option>
+          <option>🌍 IPS</option>
+          <option>🎨 Seni</option>
+          <option>🏃 Olahraga</option>
+        </select>
+
+        <!-- Deadline -->
+        <input type="date" id="deadline" class="w-full border rounded-xl px-3 py-2 mb-2">
+
+        <button onclick="addTask()" class="w-full bg-blue-500 text-white py-2 rounded-xl">
+          Tambah PR
+        </button>
+
+        <!-- List -->
+        <ul id="taskList" class="mt-4 space-y-2"></ul>
+
+      </div>
+
+      <p class="mt-6 text-blue-600 text-center">
+        🎉 Semangat belajar ya!
+      </p>
+
+      <p class="mt-2 text-sm text-gray-600">
+        Dibuat oleh: <b>Fathi Ahmad - Absen 10</b>
+      </p>
+
+    </div>
+
+    <!-- ILUSTRASI KANAN -->
+    <div class="hidden md:flex flex-col gap-4">
+      <img src="https://cdn-icons-png.flaticon.com/512/2922/2922561.png" class="w-24">
+      <img src="https://cdn-icons-png.flaticon.com/512/201/201818.png" class="w-24">
+    </div>
 
   </div>
-
-  <p class="mt-6 text-blue-600 text-center">
-    🎉 Semangat belajar ya!
-  </p>
-
-  <p class="mt-2 text-sm text-gray-600">
-    Dibuat oleh: <b>Fathi Ahmad - Absen 10</b>
-  </p>
 
 <script>
 let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
@@ -91,11 +109,14 @@ function render() {
     list.innerHTML += `
       <li class="bg-blue-100 p-3 rounded-xl">
         <div class="flex justify-between">
-          <span>✏️ ${task.text}</span>
+          <span class="font-semibold">✏️ ${task.text}</span>
           <button onclick="deleteTask(${i})">❌</button>
         </div>
-        <div class="text-sm text-gray-600">
-          📘 ${task.subject} | 📂 ${task.category} | 📅 ${task.deadline}
+        <div class="text-sm text-gray-700 mt-1">
+          ${task.desc}
+        </div>
+        <div class="text-sm text-gray-600 mt-1">
+          📘 ${task.subject} | 📅 ${task.deadline}
         </div>
         <div class="text-sm font-semibold ${remain.color}">
           ${remain.text}
@@ -107,19 +128,20 @@ function render() {
 
 function addTask() {
   const text = document.getElementById("taskInput").value;
+  const desc = document.getElementById("descInput").value;
   const subject = document.getElementById("subject").value;
-  const category = document.getElementById("category").value;
   const deadline = document.getElementById("deadline").value;
 
   if (!text || !deadline) {
-    alert("Isi PR dan deadline dulu ya!");
+    alert("Isi judul PR dan deadline dulu ya!");
     return;
   }
 
-  tasks.push({ text, subject, category, deadline });
+  tasks.push({ text, desc, subject, deadline });
   save();
 
   document.getElementById("taskInput").value = "";
+  document.getElementById("descInput").value = "";
 }
 
 function deleteTask(i) {
