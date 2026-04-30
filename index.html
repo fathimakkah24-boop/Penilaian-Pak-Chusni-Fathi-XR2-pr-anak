@@ -8,25 +8,43 @@
 <body class="bg-gradient-to-b from-blue-200 to-white min-h-screen flex flex-col items-center p-6">
 
   <h1 class="text-4xl font-bold text-blue-700 mb-4 text-center">
-    📚 Jadwal PR Anak
+    📚 Jadwal PR Anak SD
   </h1>
 
-  <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" class="w-40 mb-4">
+  <!-- Ilustrasi -->
+  <img src="https://cdn-icons-png.flaticon.com/512/3468/3468371.png" class="w-44 mb-4">
 
   <div class="bg-white shadow-xl rounded-2xl p-4 w-full max-w-md">
-    
-    <div class="flex gap-2">
-      <input id="taskInput" class="flex-1 border rounded-xl px-3 py-2" placeholder="Tulis PR kamu...">
-      <button onclick="addTask()" class="bg-blue-500 text-white px-4 rounded-xl">
-        Tambah
-      </button>
-    </div>
 
+    <!-- Input PR -->
+    <input id="taskInput" class="w-full border rounded-xl px-3 py-2 mb-2" placeholder="Tulis PR kamu...">
+
+    <!-- Kategori -->
+    <select id="category" class="w-full border rounded-xl px-3 py-2 mb-2">
+      <option value="Harian">📅 Harian</option>
+      <option value="Mingguan">🗓 Mingguan</option>
+      <option value="Bulanan">📆 Bulanan</option>
+      <option value="Tahunan">📖 Tahunan</option>
+    </select>
+
+    <!-- Deadline -->
+    <input type="date" id="deadline" class="w-full border rounded-xl px-3 py-2 mb-2">
+
+    <button onclick="addTask()" class="w-full bg-blue-500 text-white py-2 rounded-xl">
+      Tambah PR
+    </button>
+
+    <!-- List -->
     <ul id="taskList" class="mt-4 space-y-2"></ul>
+
   </div>
 
-  <p class="mt-6 text-blue-600">
-    🎉 Semangat mengerjakan PR ya!
+  <p class="mt-6 text-blue-600 text-center">
+    🎉 Semangat belajar ya!
+  </p>
+
+  <p class="mt-2 text-sm text-gray-600">
+    Dibuat oleh: <b>Fathi Ahmad - Absen 10</b>
   </p>
 
 <script>
@@ -35,22 +53,36 @@ let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
 function render() {
   const list = document.getElementById("taskList");
   list.innerHTML = "";
+
   tasks.forEach((task, i) => {
     list.innerHTML += `
-      <li class="flex justify-between bg-blue-100 p-2 rounded-xl">
-        <span>✏️ ${task}</span>
-        <button onclick="deleteTask(${i})">❌</button>
+      <li class="bg-blue-100 p-3 rounded-xl">
+        <div class="flex justify-between">
+          <span>✏️ ${task.text}</span>
+          <button onclick="deleteTask(${i})">❌</button>
+        </div>
+        <div class="text-sm text-gray-600">
+          📂 ${task.category} | ⏰ ${task.deadline}
+        </div>
       </li>
     `;
   });
 }
 
 function addTask() {
-  const input = document.getElementById("taskInput");
-  if (!input.value.trim()) return;
-  tasks.push(input.value);
-  input.value = "";
+  const text = document.getElementById("taskInput").value;
+  const category = document.getElementById("category").value;
+  const deadline = document.getElementById("deadline").value;
+
+  if (!text || !deadline) {
+    alert("Isi PR dan deadline dulu ya!");
+    return;
+  }
+
+  tasks.push({ text, category, deadline });
   save();
+
+  document.getElementById("taskInput").value = "";
 }
 
 function deleteTask(i) {
