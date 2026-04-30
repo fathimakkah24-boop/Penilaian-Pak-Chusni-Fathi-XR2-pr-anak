@@ -1,79 +1,71 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
+  <!-- INI YANG PENTING UNTUK MOBILE -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Jadwal PR Anak</title>
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gradient-to-b from-blue-200 to-white min-h-screen flex justify-center p-6">
+<body class="bg-gradient-to-b from-blue-200 to-white min-h-screen flex flex-col items-center p-4">
 
-  <!-- CONTAINER UTAMA -->
-  <div class="flex gap-6 items-start">
+  <h1 class="text-2xl md:text-4xl font-bold text-blue-700 mb-4 text-center">
+    📚 Jadwal PR Anak SD
+  </h1>
 
-    <!-- ILUSTRASI KIRI -->
-    <div class="hidden md:flex flex-col gap-4">
-      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" class="w-24">
-      <img src="https://cdn-icons-png.flaticon.com/512/1995/1995574.png" class="w-24">
-    </div>
+  <!-- Ilustrasi -->
+  <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
+       class="w-28 md:w-40 mb-4">
 
-    <!-- KONTEN UTAMA -->
-    <div class="flex flex-col items-center">
+  <div class="bg-white shadow-xl rounded-2xl p-4 w-full max-w-md">
 
-      <h1 class="text-4xl font-bold text-blue-700 mb-4 text-center">
-        📚 Jadwal PR Anak SD
-      </h1>
+    <!-- Judul -->
+    <input id="taskInput"
+      class="w-full border rounded-xl px-3 py-2 mb-2 text-sm md:text-base"
+      placeholder="Judul PR...">
 
-      <!-- Ilustrasi Tengah -->
-      <img src="https://cdn-icons-png.flaticon.com/512/3468/3468371.png" class="w-44 mb-4">
+    <!-- Deskripsi -->
+    <textarea id="descInput"
+      class="w-full border rounded-xl px-3 py-2 mb-2 text-sm md:text-base"
+      placeholder="Deskripsi PR..."></textarea>
 
-      <div class="bg-white shadow-xl rounded-2xl p-4 w-full max-w-md">
+    <!-- Mata Pelajaran -->
+    <select id="subject"
+      class="w-full border rounded-xl px-3 py-2 mb-2 text-sm md:text-base">
+      <option>📘 Matematika</option>
+      <option>📖 Bahasa Indonesia</option>
+      <option>🔬 IPA</option>
+      <option>🌍 IPS</option>
+      <option>🎨 Seni</option>
+      <option>🏃 Olahraga</option>
+    </select>
 
-        <!-- Judul PR -->
-        <input id="taskInput" class="w-full border rounded-xl px-3 py-2 mb-2" placeholder="Judul PR...">
+    <!-- Deadline -->
+    <input type="date" id="deadline"
+      class="w-full border rounded-xl px-3 py-2 mb-2 text-sm md:text-base">
 
-        <!-- Deskripsi -->
-        <textarea id="descInput" class="w-full border rounded-xl px-3 py-2 mb-2" placeholder="Deskripsi PR..."></textarea>
+    <button onclick="addTask()"
+      class="w-full bg-blue-500 text-white py-2 rounded-xl text-sm md:text-base">
+      Tambah PR
+    </button>
 
-        <!-- Mata Pelajaran -->
-        <select id="subject" class="w-full border rounded-xl px-3 py-2 mb-2">
-          <option>📘 Matematika</option>
-          <option>📖 Bahasa Indonesia</option>
-          <option>🔬 IPA</option>
-          <option>🌍 IPS</option>
-          <option>🎨 Seni</option>
-          <option>🏃 Olahraga</option>
-        </select>
-
-        <!-- Deadline -->
-        <input type="date" id="deadline" class="w-full border rounded-xl px-3 py-2 mb-2">
-
-        <button onclick="addTask()" class="w-full bg-blue-500 text-white py-2 rounded-xl">
-          Tambah PR
-        </button>
-
-        <!-- List -->
-        <ul id="taskList" class="mt-4 space-y-2"></ul>
-
-      </div>
-
-      <p class="mt-6 text-blue-600 text-center">
-        🎉 Semangat belajar ya!
-      </p>
-
-      <p class="mt-2 text-sm text-gray-600">
-        Dibuat oleh: <b>Fathi Ahmad - Absen 10</b>
-      </p>
-
-    </div>
-
-    <!-- ILUSTRASI KANAN -->
-    <div class="hidden md:flex flex-col gap-4">
-      <img src="https://cdn-icons-png.flaticon.com/512/2922/2922561.png" class="w-24">
-      <img src="https://cdn-icons-png.flaticon.com/512/201/201818.png" class="w-24">
-    </div>
+    <!-- List -->
+    <ul id="taskList" class="mt-4 space-y-2"></ul>
 
   </div>
+
+  <p class="mt-6 text-blue-600 text-center text-sm md:text-base">
+    🎉 Semangat belajar ya!
+  </p>
+
+  <p class="mt-2 text-xs md:text-sm text-gray-600 text-center">
+    Dibuat oleh: <b>Fathi Ahmad - Absen 10</b>
+  </p>
 
 <script>
 let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
@@ -107,18 +99,18 @@ function render() {
     const remain = getRemainingDays(task.deadline);
 
     list.innerHTML += `
-      <li class="bg-blue-100 p-3 rounded-xl">
-        <div class="flex justify-between">
-          <span class="font-semibold">✏️ ${task.text}</span>
+      <li class="bg-blue-100 p-3 rounded-xl text-sm md:text-base">
+        <div class="flex justify-between gap-2">
+          <span class="font-semibold break-words">✏️ ${task.text}</span>
           <button onclick="deleteTask(${i})">❌</button>
         </div>
-        <div class="text-sm text-gray-700 mt-1">
+        <div class="text-gray-700 mt-1 break-words">
           ${task.desc}
         </div>
-        <div class="text-sm text-gray-600 mt-1">
-          📘 ${task.subject} | 📅 ${task.deadline}
+        <div class="text-gray-600 mt-1">
+          ${task.subject} | 📅 ${task.deadline}
         </div>
-        <div class="text-sm font-semibold ${remain.color}">
+        <div class="font-semibold ${remain.color}">
           ${remain.text}
         </div>
       </li>
